@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Giveaway Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --success: #10b981;
+            --dark: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.8);
+            --gold: #fbbf24;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: radial-gradient(circle at top, #1e293b, #0f172a);
+            color: #f8fafc;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+
+        .dashboard {
+            width: 100%;
+            max-width: 900px;
+            text-align: center;
+        }
+
+        /* --- Host Profile Section --- */
+        .host-section {
+            margin-bottom: 30px;
+            animation: fadeIn 1s ease;
+        }
+
+        .host-img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 4px solid var(--primary);
+            box-shadow: 0 0 20px rgba(37, 99, 235, 0.4);
+            object-fit: cover;
+        }
+
+        .host-name {
+            font-weight: 700;
+            font-size: 1.4rem;
+            margin-top: 10px;
+            color: var(--primary);
+        }
+
+        /* --- Main Controls --- */
+        .status-badge {
+            background: var(--card-bg);
+            padding: 10px 20px;
+            border-radius: 50px;
+            display: inline-block;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        #timer {
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--gold);
+            margin: 20px 0;
+            display: none;
+        }
+
+        .btn-draw {
+            background: linear-gradient(135deg, var(--primary), #1d4ed8);
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.4);
+        }
+
+        .btn-draw:hover { transform: scale(1.05); filter: brightness(1.1); }
+        .btn-draw:disabled { background: #475569; cursor: not-allowed; transform: none; }
+
+        /* --- Winners Display --- */
+        .winners-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 15px;
+            margin-top: 40px;
+        }
+
+        .winner-card {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.05);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .winner-card::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 0; bottom: 0;
+            width: 5px;
+            background: var(--success);
+        }
+
+        .winner-info { text-align: left; }
+        .w-name { font-weight: 800; font-size: 1.2rem; color: var(--gold); }
+        .w-detail { font-size: 0.85rem; color: #94a3b8; margin-top: 4px; }
+        .trophy { font-size: 1.5rem; }
+
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    </style>
+</head>
+<body>
+
+<div class="dashboard">
+    <div class="host-section">
+        <img src="https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fweb.facebook.com%2Fphoto%2F%3Ffbid%3D4255243461428220%26set%3Da.1387155308237064&show_text=true&width=500" width="500" height="250" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" class="host-img" alt="Giveaway Host">
+        <div class="host-name">Arabo Modibbo Giveaway</div>
+    </div>
+
+    <div class="status-badge">Total Winners to be Picked: <b id="winnerCountDisplay">0</b></div>
+    
+    <div id="timer">3</div>
+
+    <div>
+        <button class="btn-draw" id="drawBtn">Start Lucky Draw</button>
+    </div>
+
+    <div class="winners-grid" id="winnersContainer">
+        </div>
+</div>
+
+<script>
+    // ==========================================
+    // CONFIGURATION (EDIT THESE)
+    // ==========================================
+    const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ1s0oJaHwnki5-aoSwFhDJgebj1l4HQqDzS572EksTg9SgpGxOmkFeCayMy9cQm8UMz1I4vB5rsT74/pub?gid=852868014&single=true&output=csv'; 
+    const WINNER_COUNT = 5; // Change this number to pick more or fewer winners
+    // ==========================================
+
+    const drawBtn = document.getElementById('drawBtn');
+    const container = document.getElementById('winnersContainer');
+    const timerDisplay = document.getElementById('timer');
+    const winnerCountDisplay = document.getElementById('winnerCountDisplay');
+
+    winnerCountDisplay.innerText = WINNER_COUNT;
+
+    // Audio Setup (Web Audio API for professional chime)
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playWinSound() {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.1);
+        gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.5);
+    }
+
+    async function getData() {
+        const response = await fetch(SHEET_URL);
+        const text = await response.text();
+        const rows = text.split('\n').slice(1);
+        return rows.filter(r => r.trim() !== "").map(r => {
+            const c = r.split(',');
+            return { name: c[1], phone: c[4], lga: c[6] };
+        });
+    }
+
+    drawBtn.addEventListener('click', async () => {
+        drawBtn.disabled = true;
+        const data = await getData();
+
+        if (data.length < WINNER_COUNT) {
+            alert("Not enough participants in the sheet yet!");
+            drawBtn.disabled = false;
+            return;
+        }
+
+        // Countdown Logic
+        timerDisplay.style.display = 'block';
+        let count = 3;
+        const countdown = setInterval(() => {
+            count--;
+            timerDisplay.innerText = count;
+            if (count === 0) {
+                clearInterval(countdown);
+                timerDisplay.style.display = 'none';
+                revealWinners(data);
+            }
+        }, 1000);
+    });
+
+    function revealWinners(data) {
+        // Random Selection
+        const winners = data.sort(() => 0.5 - Math.random()).slice(0, WINNER_COUNT);
+        
+        winners.forEach((winner, i) => {
+            setTimeout(() => {
+                const firstName = winner.name.trim().split(' ')[0];
+                const last3 = winner.phone.trim().slice(-3);
+                
+                const card = document.createElement('div');
+                card.className = 'winner-card';
+                card.innerHTML = `
+                    <div class="winner-info">
+                        <div class="w-name">${firstName}</div>
+                        <div class="w-detail">LGA: ${winner.lga} • ID: ***${last3}</div>
+                    </div>
+                    <div class="trophy">🏆</div>
+                `;
+                container.appendChild(card);
+                playWinSound();
+                
+                // Final celebration when last winner is shown
+                if (i === WINNER_COUNT - 1) {
+                    drawBtn.innerText = "Giveaway Completed";
+                }
+            }, i * 800); // 0.8 second gap between each winner reveal
+        });
+    }
+</script>
+
+</body>
+</html>
