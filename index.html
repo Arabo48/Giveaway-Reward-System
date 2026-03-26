@@ -12,6 +12,7 @@
             --success: #10b981;
             --dark: #0f172a;
             --gold: #fbbf24;
+            --glass: rgba(30, 41, 59, 0.85);
         }
 
         body {
@@ -21,146 +22,199 @@
             margin: 0;
             display: flex;
             justify-content: center;
-            padding: 40px 20px;
+            padding: 60px 20px;
             min-height: 100vh;
             overflow-x: hidden;
             position: relative;
         }
 
-        /* --- Floating Coins Background --- */
-        .coin {
-            position: absolute;
-            color: var(--gold);
-            font-size: 20px;
-            opacity: 0.2;
-            z-index: -1;
-            animation: float 10s linear infinite;
+        /* --- Floating Background --- */
+        #bg-animation { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+        .coin { position: absolute; color: var(--gold); opacity: 0.15; animation: floatUp 12s linear infinite; }
+        @keyframes floatUp {
+            0% { transform: translateY(110vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.2; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
         }
 
-        @keyframes float {
-            0% { transform: translateY(110vh) rotate(0deg); }
-            100% { transform: translateY(-10vh) rotate(360deg); }
+        /* --- Live Badge --- */
+        .live-badge {
+            position: fixed; top: 20px; left: 20px;
+            background: rgba(239, 68, 68, 0.2);
+            color: #f87171; border: 1px solid #ef4444;
+            padding: 6px 15px; border-radius: 50px;
+            font-size: 0.75rem; font-weight: 800;
+            display: flex; align-items: center; gap: 8px; z-index: 100;
         }
+        .dot { width: 8px; height: 8px; background: #ef4444; border-radius: 50%; animation: blink 1s infinite; }
+        @keyframes blink { 50% { opacity: 0; } }
 
         .dashboard { width: 100%; max-width: 900px; text-align: center; position: relative; z-index: 10; }
 
         .profile-container {
-            width: 130px; height: 130px; margin: 0 auto 15px;
+            width: 140px; height: 140px; margin: 0 auto 20px;
             border-radius: 50%; border: 4px solid var(--primary);
             overflow: hidden; background: #1e293b;
-            box-shadow: 0 0 30px rgba(37, 99, 235, 0.4);
+            box-shadow: 0 0 40px rgba(37, 99, 235, 0.4);
         }
         .profile-container img { width: 100%; height: 100%; object-fit: cover; }
         
-        .host-name { font-weight: 700; font-size: 1.6rem; color: var(--primary); margin-bottom: 10px; }
+        .host-name { font-weight: 900; font-size: 1.8rem; color: var(--primary); margin-bottom: 10px; }
         
         .amount-badge {
             background: rgba(251, 191, 36, 0.15); color: var(--gold);
-            padding: 10px 25px; border-radius: 50px; border: 1px solid var(--gold);
-            font-weight: 800; display: inline-block; margin-bottom: 25px;
+            padding: 12px 30px; border-radius: 50px; border: 1px solid var(--gold);
+            font-weight: 900; display: inline-block; margin-bottom: 30px;
             animation: pulse 2s infinite;
         }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
 
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-
-        #timer { font-size: 5rem; font-weight: 900; color: var(--gold); margin: 30px 0; display: none; }
+        #timer { font-size: 6rem; font-weight: 900; color: var(--gold); margin: 30px 0; display: none; }
 
         .btn-draw {
             background: linear-gradient(135deg, var(--primary), #1d4ed8);
-            color: white; border: none; padding: 20px 60px;
-            font-size: 1.4rem; font-weight: 800; border-radius: 15px;
-            cursor: pointer; box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+            color: white; border: none; padding: 22px 70px;
+            font-size: 1.5rem; font-weight: 900; border-radius: 18px;
+            cursor: pointer; box-shadow: 0 15px 35px rgba(0,0,0,0.4);
             transition: 0.3s;
         }
-        .btn-draw:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(37, 99, 235, 0.3); }
 
         .congrats-msg {
             font-size: 2rem; font-weight: 900; color: var(--success);
-            margin: 40px 0 20px; display: none;
-            text-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
+            margin: 40px 0 25px; display: none;
         }
 
         .winners-grid {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 20px; margin-top: 20px;
         }
 
         .winner-card {
-            background: rgba(30, 41, 59, 0.8); padding: 20px;
-            border-radius: 20px; border: 1px solid rgba(255,255,255,0.1);
-            display: flex; align-items: center; gap: 15px;
-            backdrop-filter: blur(10px);
-            animation: slideUp 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            background: var(--glass); padding: 25px;
+            border-radius: 24px; border: 1px solid rgba(255,255,255,0.08);
+            display: flex; align-items: center; gap: 18px;
+            backdrop-filter: blur(12px);
+            animation: slideIn 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
 
         .serial-no {
             background: var(--primary); color: white;
-            width: 40px; height: 40px; border-radius: 12px;
+            width: 45px; height: 45px; border-radius: 14px;
             display: flex; align-items: center; justify-content: center;
             font-weight: 900; flex-shrink: 0;
         }
 
-        .w-name { font-weight: 800; font-size: 1.2rem; color: var(--gold); text-align: left; }
-        .w-detail { font-size: 0.85rem; color: #94a3b8; text-align: left; }
+        .w-name { font-weight: 800; font-size: 1.3rem; color: var(--gold); text-align: left; }
+        .w-detail { font-size: 0.9rem; color: #94a3b8; text-align: left; }
 
-        #downloadBtn {
-            margin-top: 40px; background: #334155; color: #cbd5e1;
-            border: none; padding: 12px 25px; cursor: pointer;
-            border-radius: 10px; display: none; font-weight: 600;
+        .action-btns { margin-top: 50px; display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; }
+
+        .btn-share {
+            background: #25d366; color: white; border: none;
+            padding: 14px 30px; border-radius: 12px; font-weight: 700;
+            cursor: pointer; display: none; text-decoration: none;
         }
 
-        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        #downloadBtn {
+            background: #334155; color: #f1f5f9; border: none;
+            padding: 14px 30px; border-radius: 12px; font-weight: 700;
+            cursor: pointer; display: none;
+        }
+
+        @keyframes slideIn { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
 <div id="bg-animation"></div>
+<div class="live-badge"><div class="dot"></div> OFFICIAL LIVE RESULTS</div>
 
 <div class="dashboard">
     <div class="host-section">
         <div class="profile-container">
-            <img src="images/me.jpg" onerror="this.src='https://via.placeholder.com/150'" alt="Host">
+            <img src="images/me.jpg" onerror="this.src='https://via.placeholder.com/150?text=Arabo'" alt="Arabo Modibbo">
         </div>
         <div class="host-name">Arabo Modibbo Giveaway</div>
-        <div class="amount-badge" id="amtDisplay">WIN ₦5,000 EACH</div>
+        <div class="amount-badge" id="amtDisplay">PRIZE: ₦5,000 EACH</div>
     </div>
 
     <div id="timer">3</div>
-    <button class="btn-draw" id="drawBtn">Start Lucky Draw</button>
+    <button class="btn-draw" id="drawBtn">Reveal Lucky Winners</button>
 
-    <div class="congrats-msg" id="congratsMsg">🏆 CONGRATULATIONS TO THE WINNERS! 🏆</div>
+    <div class="congrats-msg" id="congratsMsg">🏆 CONGRATULATIONS WINNERS! 🏆</div>
     <div class="winners-grid" id="winnersContainer"></div>
     
-    <button id="downloadBtn">📥 Admin: Download Winners List</button>
+    <div class="action-btns">
+        <a id="shareBtn" class="btn-share" href="#" target="_blank">📲 Share to WhatsApp Status</a>
+        <button id="downloadBtn">📥 Admin: Download List</button>
+    </div>
 </div>
 
 <script>
-    // --- SETUP COIN BACKGROUND ---
-    const bg = document.getElementById('bg-animation');
-    const coinIcons = ['₦', '💰', '✨', '⭐'];
-    for(let i=0; i<15; i++) {
-        const coin = document.createElement('div');
-        coin.className = 'coin';
-        coin.innerText = coinIcons[Math.floor(Math.random() * coinIcons.length)];
-        coin.style.left = Math.random() * 100 + 'vw';
-        coin.style.animationDelay = Math.random() * 5 + 's';
-        coin.style.fontSize = (Math.random() * 20 + 20) + 'px';
-        bg.appendChild(coin);
-    }
-
-    // --- CONFIGURATION ---
+    // --- 1. CONFIGURATION ---
     const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ1s0oJaHwnki5-aoSwFhDJgebj1l4HQqDzS572EksTg9SgpGxOmkFeCayMy9cQm8UMz1I4vB5rsT74/pub?gid=852868014&single=true&output=csv';
     const WINNER_COUNT = 10;           
     const GIVEAWAY_AMOUNT = "₦5,000"; 
-    const SELECTION_MODE = 'RANDOM'; 
     const ADMIN_PASSWORD = "123"; 
+    const DRAW_ID = "DRAW_ID_MARCH_2026"; // Change this text for a new draw
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const isAdmin = urlParams.get('admin') === ADMIN_PASSWORD;
+    // --- 2. AUDIO & VOICE FUNCTIONS ---
+    function playCelebrationEffects() {
+        const msg = new SpeechSynthesisUtterance();
+        msg.text = "Congratulations to the lucky winners!";
+        msg.rate = 0.9;
+        window.speechSynthesis.speak(msg);
+
+        // Clapping Sound Generator
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        for(let i = 0; i < 15; i++) {
+            setTimeout(() => {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(100 + (Math.random() * 400), audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+                osc.connect(gain); gain.connect(audioCtx.destination);
+                osc.start(); osc.stop(audioCtx.currentTime + 0.3);
+            }, i * 80);
+        }
+    }
+
+    // --- 3. SEEDED RANDOMNESS ---
+    function seedRandom(seed) {
+        let value = 0;
+        for (let i = 0; i < seed.length; i++) {
+            value = (value << 5) - value + seed.charCodeAt(i);
+            value |= 0;
+        }
+        return function() {
+            value = (value * 1103515245 + 12345) & 0x7fffffff;
+            return value / 0x7fffffff;
+        };
+    }
+
+    // --- 4. ANIMATION ---
+    const bg = document.getElementById('bg-animation');
+    const icons = ['₦', '💰', '✨'];
+    for(let i=0; i<15; i++) {
+        const coin = document.createElement('div');
+        coin.className = 'coin';
+        coin.innerText = icons[Math.floor(Math.random() * icons.length)];
+        coin.style.left = Math.random() * 100 + 'vw';
+        coin.style.animationDelay = Math.random() * 8 + 's';
+        bg.appendChild(coin);
+    }
+
+    // --- 5. MAIN LOGIC ---
+    const drawBtn = document.getElementById('drawBtn');
+    const container = document.getElementById('winnersContainer');
+    const timerDisplay = document.getElementById('timer');
+    const congratsMsg = document.getElementById('congratsMsg');
+    const downloadBtn = document.getElementById('downloadBtn');
+    const shareBtn = document.getElementById('shareBtn');
+
+    const isAdmin = new URLSearchParams(window.location.search).get('admin') === ADMIN_PASSWORD;
 
     async function fetchEntries() {
         try {
@@ -170,40 +224,40 @@
             return rows.filter(row => row.trim() !== "").map(row => {
                 const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
                 return {
-                    name: (cols[1] || "User").replace(/"/g, ''),
-                    phone: (cols[4] || "000").replace(/"/g, ''),
-                    lga: (cols[6] || "N/A").replace(/"/g, '')
+                    name: (cols[1] || "User").replace(/"/g, '').trim(),
+                    phone: (cols[4] || "000").replace(/"/g, '').trim(),
+                    lga: (cols[6] || "N/A").replace(/"/g, '').trim()
                 };
             });
         } catch (e) { return []; }
     }
 
-    document.getElementById('drawBtn').addEventListener('click', async function() {
-        this.style.display = 'none';
+    drawBtn.addEventListener('click', async () => {
+        drawBtn.style.display = 'none';
         const entries = await fetchEntries();
-        if (entries.length === 0) { alert("Sheet is empty!"); this.style.display = 'block'; return; }
+        if (entries.length === 0) { alert("Empty Database!"); return; }
 
-        const timer = document.getElementById('timer');
-        timer.style.display = 'block';
+        timerDisplay.style.display = 'block';
         let count = 3;
         const countdown = setInterval(() => {
             count--;
-            if (count > 0) timer.innerText = count;
+            if (count > 0) timerDisplay.innerText = count;
             else {
                 clearInterval(countdown);
-                timer.style.display = 'none';
+                timerDisplay.style.display = 'none';
                 revealWinners(entries);
             }
         }, 1000);
     });
 
     function revealWinners(data) {
-        let winners = SELECTION_MODE === 'RANDOM' ? 
-            data.sort(() => 0.5 - Math.random()).slice(0, WINNER_COUNT) : 
-            data.slice(0, WINNER_COUNT);
+        data.sort((a, b) => a.name.localeCompare(b.name));
+        const myRandom = seedRandom(DRAW_ID);
+        const winners = data.map(v => ({ v, s: myRandom() })).sort((a, b) => a.s - b.s).map(x => x.v).slice(0, WINNER_COUNT);
 
-        document.getElementById('congratsMsg').style.display = 'block';
-        if (isAdmin) document.getElementById('downloadBtn').style.display = 'inline-block';
+        congratsMsg.style.display = 'block';
+        shareBtn.style.display = 'inline-block';
+        if (isAdmin) downloadBtn.style.display = 'inline-block';
 
         winners.forEach((w, i) => {
             setTimeout(() => {
@@ -213,40 +267,40 @@
                     <div class="serial-no">#${i + 1}</div>
                     <div style="flex-grow:1">
                         <div class="w-name">${w.name.split(' ')[0]}</div>
-                        <div class="w-detail">${w.lga} • ID: ***${w.phone.slice(-3)}</div>
+                        <div class="w-detail">${w.lga} LGA • ID: ***${w.phone.slice(-3)}</div>
                     </div>
                     <div style="color:var(--success); font-weight:900">${GIVEAWAY_AMOUNT}</div>
                 `;
-                document.getElementById('winnersContainer').appendChild(card);
+                container.appendChild(card);
                 
-                // Confetti blast on last winner
                 if (i === winners.length - 1) {
-                    confetti({
-                        particleCount: 150,
-                        spread: 70,
-                        origin: { y: 0.6 },
-                        colors: ['#2563eb', '#fbbf24', '#10b981']
-                    });
+                    confetti({ particleCount: 180, spread: 80, origin: { y: 0.65 } });
+                    playCelebrationEffects();
+                    setupShare(winners);
                 }
-            }, i * 600);
+            }, i * 650);
         });
-
-        // Store for download
-        window.luckyWinners = winners;
+        window.winnersData = winners;
     }
 
-    document.getElementById('downloadBtn').addEventListener('click', () => {
-        let txt = `ARABO MODIBBO WINNERS\nAmount: ${GIVEAWAY_AMOUNT}\n\n`;
-        window.luckyWinners.forEach((w, i) => {
-            txt += `${i+1}. ${w.name} | ${w.phone} | ${w.lga}\n`;
+    function setupShare(winners) {
+        let text = `*ARABO MODIBBO GIVEAWAY WINNERS* 🏆\n\n`;
+        winners.forEach((w, i) => {
+            text += `${i+1}. ${w.name.split(' ')[0]} (${w.lga})\n`;
         });
-        const blob = new Blob([txt], { type: 'text/plain' });
+        text += `\n*Congratulations to all!* 🎊`;
+        shareBtn.href = `https://wa.me/?text=${encodeURIComponent(text)}`;
+    }
+
+    downloadBtn.addEventListener('click', () => {
+        let content = `ARABO MODIBBO WINNERS\n\n`;
+        window.winnersData.forEach((w, i) => content += `${i+1}. ${w.name} | ${w.phone} | ${w.lga}\n`);
+        const blob = new Blob([content], { type: 'text/plain' });
         const a = document.createElement('a');
         a.href = URL.createObjectURL(blob);
-        a.download = 'winners.txt';
+        a.download = `Winners.txt`;
         a.click();
     });
 </script>
-
 </body>
 </html>
