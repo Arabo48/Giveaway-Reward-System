@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arabo Modibbo Official Giveaway</title>
+    <title>Arabo M. Auwal Official Giveaway</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
@@ -45,8 +45,8 @@
         <div class="profile-container">
             <img src="images/me.jpg" onerror="this.src='https://via.placeholder.com/150?text=Arabo'" alt="Arabo Modibbo">
         </div>
-        <div class="host-name">Arabo Modibbo Giveaway</div>
-        <div class="amount-badge" id="amtDisplay">PRIZE: ₦5,000 EACH</div>
+        <div class="host-name">Arabo M. Auwal Giveaway</div>
+        <div class="amount-badge" id="amtDisplay">PRIZE: ₦1,000 EACH</div>
     </div>
 
     <div id="timer">3</div>
@@ -65,8 +65,8 @@
     // --- 1. CONFIGURATION ---
     // Note: I have cleaned the SHEET_URL slightly to make it more direct.
     const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ1s0oJaHwnki5-aoSwFhDJgebj1l4HQqDzS572EksTg9SgpGxOmkFeCayMy9cQm8UMz1I4vB5rsT74/pub?output=csv';
-    const WINNER_COUNT = 10;           
-    const GIVEAWAY_AMOUNT = "₦5,000"; 
+    const WINNER_COUNT = 6;           
+    const GIVEAWAY_AMOUNT = "₦1,000"; 
     const ADMIN_PASSWORD = "123"; 
     const DRAW_ID = "DRAW_ID_MARCH_2026";
 
@@ -195,14 +195,14 @@
     }
 
     function setupShare(winners) {
-        let text = `*ARABO MODIBBO GIVEAWAY WINNERS* 🏆\n\n`;
+        let text = `*ARABO M. AUWAL GIVEAWAY WINNERS* 🏆\n\n`;
         winners.forEach((w, i) => { text += `${i+1}. ${w.name.split(' ')[0]} (${w.lga})\n`; });
         text += `\n*Congratulations to all!* 🎊`;
         shareBtn.href = `https://wa.me/?text=${encodeURIComponent(text)}`;
     }
 
     downloadBtn.addEventListener('click', () => {
-        let content = `ARABO MODIBBO WINNERS\n\n`;
+        let content = `ARABO M. AUWAL WINNERS\n\n`;
         window.winnersData.forEach((w, i) => content += `${i+1}. ${w.name} | ${w.phone} | ${w.lga}\n`);
         const blob = new Blob([content], { type: 'text/plain' });
         const a = document.createElement('a');
