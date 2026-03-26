@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arabo Modibbo Official Giveaway</title>
+    <title>Arabo M. Auwal Official Giveaway</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
@@ -54,11 +54,11 @@
 <div class="dashboard">
     <div class="host-section">
         <div class="profile-container">
-            <img src="images/me.jpg" onerror="this.src='https://via.placeholder.com/150?text=Arabo'" alt="Arabo Modibbo">
+            <img src="me.jpg" onerror="this.src='https://via.placeholder.com/150?text=Arabo'" alt="Arabo M. Auwal">
         </div>
-        <div class="host-name">Arabo Modibbo Giveaway</div>
+        <div class="host-name">Arabo M. Auwal Giveaway</div>
         <div class="sync-time" id="syncLabel">Fetching data...</div>
-        <div class="amount-badge" id="amtDisplay">WINNING ₦5,000 EACH</div>
+        <div class="amount-badge" id="amtDisplay">WINNING ₦1,000 EACH</div>
     </div>
 
     <div id="timer">3</div>
@@ -76,8 +76,8 @@
 <script>
     // --- CONFIGURATION ---
     const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ1s0oJaHwnki5-aoSwFhDJgebj1l4HQqDzS572EksTg9SgpGxOmkFeCayMy9cQm8UMz1I4vB5rsT74/pub?output=csv';
-    const WINNER_COUNT = 10;           
-    const GIVEAWAY_AMOUNT = "₦5,000"; 
+    const WINNER_COUNT = 6;           
+    const GIVEAWAY_AMOUNT = "₦1,000"; 
     const ADMIN_PASSWORD = "123"; 
     const DRAW_ID = "MARCH_26_FULL_INFO";
 
@@ -187,14 +187,14 @@
     }
 
     function setupShare(winners) {
-        let text = `*ARABO MODIBBO GIVEAWAY WINNERS* 🏆\n\n`;
+        let text = `*ARABO M Auwal GIVEAWAY WINNERS* 🏆\n\n`;
         winners.forEach((w, i) => { text += `${i+1}. ${w.name.split(' ')[0]} (${w.lga})\n`; });
         text += `\n*Congratulations to all!* 🎊`;
         shareBtn.href = `https://wa.me/?text=${encodeURIComponent(text)}`;
     }
 
     downloadBtn.addEventListener('click', () => {
-        let content = `ARABO MODIBBO MASTER WINNERS DATABASE\nDraw ID: ${DRAW_ID}\nGenerated: ${new Date().toLocaleString()}\n\n`;
+        let content = `ARABO M AUWAL MASTER WINNERS DATABASE\nDraw ID: ${DRAW_ID}\nGenerated: ${new Date().toLocaleString()}\n\n`;
         content += `S/N | FULL NAME | ACCOUNT | BANK | PHONE | EMAIL | LGA | WARD\n`;
         content += `--------------------------------------------------------------------------------------------------\n`;
         window.winnersData.forEach((w, i) => {
